@@ -1,9 +1,9 @@
 import serial
 import datetime
 import json
+import tkinter as tk
 
-now = datetime.datetime.now()
-ser = serial.Serial('COM4', 115200)
+ser = serial.Serial('COM4', 115200, timeout=1)
 
 with open("activity_data.json", "r") as file:
     data = json.load(file)
@@ -17,17 +17,37 @@ def add_activity (date):
         json.dump(data, file, indent=4)
 
 
-while True:
-    temp = ser.readline().decode().strip()
-    print(f"Received signal {temp}")
-    #print(now.year, now.month, now.day, now.hour)
-    add_activity(
-        {
-            "year": now.year,
-            "month": now.month,
-            "day": now.day,
-            "hour": now.hour
-        }
-    )
+
+
+
+def read_serial():
+    while True:
+        temp = ser.readline().decode().strip()
+        if temp: 
+            now = datetime.datetime.now()
+            print(f"Received signal {temp}")
+            #print(now.year, now.month, now.day, now.hour)
+            add_activity(
+                {
+                    "year": now.year,
+                    "month": now.month,
+                    "day": now.day,
+                    "hour": now.hour
+                }
+            )
+        window.after(100, read_serial)
     #if (int(temp) > 0):
     #    print("got a signal")
+
+window = tk.Tk()
+
+window.title("Dør aktivitet")
+
+label = tk.Label(window, text="Aktivitet i døra")
+label.pack()
+
+window.after(100, read_serial)
+
+window.mainloop()
+
+

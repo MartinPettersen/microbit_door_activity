@@ -49,7 +49,7 @@ window = tk.Tk()
 
 width_screen = window.winfo_screenwidth()
 height_screen = window.winfo_screenheight()
-win_width = 250
+win_width = 700
 win_height = 200
 
 x = width_screen - win_width - 10
@@ -75,13 +75,16 @@ button_left = tk.Button(
 button_left.grid(row=1, column=0, padx=5, pady=5)
 
 
-temp_label = tk.Label(
-    text="placeholder for activity data",
-    foreground="black",
-    background="white"
-)
-#temp_label.pack()
-temp_label.grid(row=1, column=1, padx=5, pady=5)
+activity_container = tk.Frame(window, bg="aliceblue")
+activity_container.grid(row=1, column=1, padx=4, pady=4)
+
+
+for hour in range(24):
+    blueSquare = tk.Label(activity_container, bg="skyblue",width=1,height=2)
+    blueSquare.grid(row=0, column=hour, padx=5, pady=5)
+
+    hourLabel = tk.Label(activity_container, text=f"{hour}")
+    hourLabel.grid(row=1, column=hour, padx=5, pady=5)
 
 button_right = tk.Button(
     text=">",

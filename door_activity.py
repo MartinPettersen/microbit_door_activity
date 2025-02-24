@@ -45,12 +45,22 @@ def on_new_data(event):
         last_activity = data[-1]
         label.config(text=f"new signal : {last_activity.get('signal')}")
 
+def get_activity_day(day, month, year):
+    result = list(filter(lambda x: (x["day"] == day and x["month"] == month and x["year"] == year), data))
+    return len(result)
+
+
+def get_activity_hour(hour, day, month, year):
+    result = list(filter(lambda x: (x["hour"] == hour and x["day"] == day and x["month"] == month and x["year"] == year), data))
+    return len(result)
+
+
 window = tk.Tk()
 
 width_screen = window.winfo_screenwidth()
 height_screen = window.winfo_screenheight()
 win_width = 700
-win_height = 200
+win_height = 240
 
 x = width_screen - win_width - 10
 y = height_screen - win_height - 10
@@ -59,7 +69,7 @@ window.geometry(f"{win_width}x{win_height}+{x}+{y}")
 
 window.title("Dør aktivitet")
 
-
+#def data_display():
 label = tk.Label(window, text=f"Aktivitet i døra {now.day}.{now.month}.{now.year}")
 #label.pack()
 label.grid(row=0, column=1, padx=5, pady=5)
@@ -79,9 +89,14 @@ activity_container = tk.Frame(window, bg="aliceblue")
 activity_container.grid(row=1, column=1, padx=4, pady=4)
 
 
+allActivityDay = get_activity_day(24, 2, 2025)
+print("totalacitivityday", allActivityDay)
+
 for hour in range(24):
-    blueSquare = tk.Frame(activity_container, bg="skyblue",width=6,height=15, relief="solid")
-    blueSquare.grid(row=0, column=hour, padx=5, pady=5)
+    activity_in_hour = get_activity_hour(hour, 24, 2, 2025)
+    print(f"hour: {hour}, activity: {activity_in_hour}")
+    blueSquare = tk.Frame(activity_container, bg="skyblue",width=6,height=(activity_in_hour *( 100 / allActivityDay)), relief="solid")
+    blueSquare.grid(row=0, column=hour, padx=5, pady=5, sticky="s")
     blueSquare.grid_propagate(False)
 
     hourLabel = tk.Label(activity_container, text=f"{hour}")

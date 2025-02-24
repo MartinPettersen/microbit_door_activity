@@ -80,8 +80,9 @@ activity_container.grid(row=1, column=1, padx=4, pady=4)
 
 
 for hour in range(24):
-    blueSquare = tk.Label(activity_container, bg="skyblue",width=1,height=2)
+    blueSquare = tk.Frame(activity_container, bg="skyblue",width=6,height=15, relief="solid")
     blueSquare.grid(row=0, column=hour, padx=5, pady=5)
+    blueSquare.grid_propagate(False)
 
     hourLabel = tk.Label(activity_container, text=f"{hour}")
     hourLabel.grid(row=1, column=hour, padx=5, pady=5)

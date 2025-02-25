@@ -20,7 +20,6 @@ with open("activity_data.json", "r") as file:
         data = []
 
 def add_activity (date):
-    print(date)
     data.append(date)
     with open("activity_data.json", "w") as file:
         json.dump(data, file, indent=4)
@@ -29,8 +28,6 @@ def read_serial():
     while True:
         temp = ser.readline().decode().strip()
         if temp: 
-            print(f"Received signal {temp}")
-            #print(now.year, now.month, now.day, now.hour)
             add_activity(
                 {
                     "year": now.year,
@@ -42,16 +39,12 @@ def read_serial():
             window.event_generate("<<NewData>>", when="tail")
         
         time.sleep(0.1)
-        #window.after(100, read_serial)
-    #if (int(temp) > 0):
-    #    print("got a signal")
+
 
 def on_new_data(event):
-    print("tester")
     update_display()
     if data:
         last_activity = data[-1]
-        #label.config(text=f"new signal : {last_activity.get('signal')}")
 
 def get_activity_day():
     result = list(filter(lambda x: (x["day"] == now.day and x["month"] == now.month and x["year"] == now.year), data))
@@ -79,7 +72,6 @@ window.title("Dør aktivitet")
 label = tk.Label(window, text=f"Aktivitet i døra {now.day}.{now.month}.{now.year}")
 
 def init_display():
-    #label.pack()
     label.grid(row=0, column=1, padx=5, pady=5)
 
     button_left = tk.Button(
@@ -90,7 +82,6 @@ def init_display():
         fg="white",
         command=yesterday
     )
-    #button_left.pack()
     button_left.grid(row=1, column=0, padx=5, pady=5, 
         )
 
@@ -100,11 +91,9 @@ def init_display():
 
 
     allActivityDay = get_activity_day()
-    print("totalacitivityday", allActivityDay)
 
     for hour in range(24):
         activity_in_hour = get_activity_hour(hour)
-        #print(f"hour: {hour}, activity: {activity_in_hour}")
         if (allActivityDay != 0):   
             blueSquare = tk.Frame(activity_container, bg="skyblue",width=6,height=(activity_in_hour *( 100 / allActivityDay)), relief="solid")
         else:
@@ -126,10 +115,7 @@ def init_display():
         command=next_day
     )
 
-    #button_right.pack()
     button_right.grid(row=1, column=2, padx=5, pady=5)
-
-    #window.after(100, read_serial)
 
 window.bind("<<NewData>>", on_new_data)
 
@@ -137,7 +123,6 @@ def update_display():
     allActivityDay = get_activity_day()
         
     for i, square in enumerate(daily_activity_data):
-        print("i ",i)
         
         activity_in_hour = get_activity_hour(i)
         if (allActivityDay != 0):   
